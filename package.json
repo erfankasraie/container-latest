@@ -1,0 +1,29 @@
+{
+  "name": "container-app-00.00.02",
+  "version": "1.0.0",
+  "description": "managing containers",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erfankasraie/container-app-00.00.02.git"
+  },
+  "author": "erfankasraie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erfankasraie/container-app-00.00.02/issues"
+  },
+  "homepage": "https://github.com/erfankasraie/container-app-00.00.02#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "pdfkit": "^0.17.1",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0"
+  }
+}

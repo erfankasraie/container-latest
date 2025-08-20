@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<link rel="stylesheet" href="/css/style.css">
+<link href="/fonts/font.css" rel="stylesheet" />
+<head>
+  <meta charset="UTF-8">
+  <title>ورود</title>
+</head>
+<script>
+  (function(){
+    const btn = document.getElementById('themeToggle');
+    const body = document.body;
+    const label = btn.querySelector('.label');
+
+    // init: از localStorage یا prefers-color-scheme
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      body.classList.add('dark-mode');
+      btn.setAttribute('aria-pressed', 'true');
+      if(label) label.textContent = 'حالت روشن';
+    } else {
+      body.classList.remove('dark-mode');
+      btn.setAttribute('aria-pressed', 'false');
+      if(label) label.textContent = 'حالت تاریک';
+    }
+
+    btn.addEventListener('click', function() {
+      const isDark = body.classList.toggle('dark-mode');
+      btn.setAttribute('aria-pressed', String(isDark));
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      if(label) {
+        // متن با یک افکت نرم عوض شود
+        label.style.opacity = 0;
+        setTimeout(() => {
+          label.textContent = isDark ? 'حالت روشن' : 'حالت تاریک';
+          label.style.opacity = 1;
+        }, 180);
+      }
+    });
+
+    // اگر کاربر تنظیم سیستم را تغییر داد، همخوان کن (اختیاری)
+    if(window.matchMedia){
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        // فقط در صورتی sync کن که کاربر تاکنون تغییری نداده (localStorage خالی)
+        if(!localStorage.getItem('theme')){
+          if(e.matches){ body.classList.add('dark-mode'); btn.setAttribute('aria-pressed','true'); if(label) label.textContent='حالت روشن'; }
+          else { body.classList.remove('dark-mode'); btn.setAttribute('aria-pressed','false'); if(label) label.textContent='حالت تاریک'; }
+        }
+      });
+    }
+  })();
+</script>
+<body>
+  
+<button class="theme-toggle" id="themeToggle" aria-pressed="false" aria-label="تغییر تم" title="تغییر تم">
+  <!-- Sun (برای نمایش در دارک مود) -->
+  <span class="icon sun" aria-hidden="true">
+    <!-- در صورت نیاز می‌تونی اینجا SVG قرار بدی؛ emoji هم خوبه -->
+    ☀️
+  </span>
+
+  <!-- Moon (برای نمایش در لایت مود) -->
+  <span class="icon moon" aria-hidden="true">
+    🌙
+  </span>
+
+  <!-- متن -->
+  <span class="label" aria-live="polite">حالت تاریک</span>
+</button>
+  <h2>ورود به سیستم</h2>
+  <form method="POST" action="/login">
+    <input name="company" placeholder="نام شرکت" required>
+    <input name="username" placeholder="نام کاربری" required>
+    <input type="password" name="password" placeholder="رمز عبور" required>
+    <button type="submit">ورود</button>
+  </form>
+  <p>ثبت‌نام شرکت جدید: <a href="/register">اینجا</a></p>
+ <p> Product by Erfan Kasraie </p>
+ <p> Contact Us : <a href="erfankasraiee@gmail.com" Email </a></p>
+</body>
+</html>

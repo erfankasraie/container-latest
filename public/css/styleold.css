@@ -1,0 +1,50 @@
+  <style>
+    body {
+      font-family: 'Vazir', sans-serif;
+      background-color: #f2f4f7;
+      margin: 0;
+      padding: 60px;
+      direction: rtl;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background-color: #fff;
+      padding: 26px;
+      border-radius: 50px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      border: 1px solid #ddd;
+    }
+    h2 { color: #0a3d62; margin-bottom: 20px; }
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    input, select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      background-color: #fafafa;
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background-color: #0056b3; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+    }
+    th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+    thead { background-color: #e9f0fb; color: #003d7a; }
+  </style>

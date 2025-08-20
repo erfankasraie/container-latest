@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مدیریت کانتینر – <%= company %></title>
+  <link href="/fonts/font.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-pressed="false" aria-label="تغییر تم" title="تغییر تم">
+  <!-- Sun (برای نمایش در دارک مود) -->
+  <span class="icon sun" aria-hidden="true">
+    <!-- در صورت نیاز می‌تونی اینجا SVG قرار بدی؛ emoji هم خوبه -->
+    ☀️
+  </span>
+
+  <!-- Moon (برای نمایش در لایت مود) -->
+  <span class="icon moon" aria-hidden="true">
+    🌙
+  </span>
+
+  <!-- متن -->
+  <span class="label" aria-live="polite">حالت تاریک</span>
+</button>
+
+
+  <div class="container">
+    <h2>مدیریت کانتینر – <%= company %></h2>
+    <button>کاربر جدید: <a href="/users">ثبت</a></button>
+    <p>خوش آمدی <a><%= username %></a> </p> 
+    <button><a href="/logout">خروج</a></button>
+
+    <form method="POST" action="/add">
+      <input name="owner" placeholder="صاحب کالا"required>
+      <input name="entry_date" placeholder="تاریخ ورود"required>
+      <input name="entry_driver_name" placeholder="راننده ورود"required>
+      <input name="entry_phone" placeholder="موبایل ورود"required>
+      <input name="exit_date" placeholder="تاریخ خروج"required>
+      <input name="exit_driver_name" placeholder="راننده خروج"required>
+      <input name="exit_phone" placeholder="موبایل خروج"required>
+      <input name="type" placeholder="نوع کانتینر"required>
+      <input name="container_no" placeholder="شماره کانتینر"required>
+      <button type="submit">ثبت</button>
+    </form>
+
+    <h3>لیست کانتینرها</h3>
+    <input type="text" id="search" placeholder="جستجو..." onkeyup="searchTable()">
+
+    <table id="containerTable">
+      <thead>
+       <tr>
+         <th>شماره</th>
+         <th>صاحب کالا</th>
+         <th>تاریخ ورود</th>
+         <th>راننده ورود</th>
+         <th>موبایل ورود</th>
+         <th>تاریخ خروج</th>
+         <th>راننده خروج</th>
+         <th>موبایل خروج</th>
+         <th>نوع</th>
+         <th>شماره کانتینر</th>
+         <th>فاکتور</th>
+         <th>ثبت‌کننده</th>
+
+       </tr>
+      </thead>
+      <tbody>
+
+      <% let count = 1; %>
+      <% containers.forEach(row => { %>
+      <tr>
+        <td><%= count++ %></td>
+        <td><%= row.owner %></td>
+        <td><%= row.entry_date %></td>
+        <td><%= row.driver_name %></td>
+        <td><%= row.entry_phone %></td>
+        <td><%= row.exit_date %></td>
+        <td><%= row.exit_driver_name %></td>
+        <td><%= row.exit_phone %></td>
+        <td><%= row.type %></td>
+        <td><%= row.container_no %></td>
+        <td><a href="/invoice/<%= row.id %>" target="_blank">دانلود</a></td>
+        <td><%= row.created_by_user || "-" %></td>
+      </tr>
+      <% }) %>
+     <tbody>
+   </table>
+  </div>
+  
+
+<script>
+  (function(){
+    const btn = document.getElementById('themeToggle');
+    const body = document.body;
+    const label = btn.querySelector('.label');
+
+    // init: از localStorage یا prefers-color-scheme
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      body.classList.add('dark-mode');
+      btn.setAttribute('aria-pressed', 'true');
+      if(label) label.textContent = 'حالت روشن';
+    } else {
+      body.classList.remove('dark-mode');
+      btn.setAttribute('aria-pressed', 'false');
+      if(label) label.textContent = 'حالت تاریک';
+    }
+
+    btn.addEventListener('click', function() {
+      const isDark = body.classList.toggle('dark-mode');
+      btn.setAttribute('aria-pressed', String(isDark));
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      if(label) {
+        // متن با یک افکت نرم عوض شود
+        label.style.opacity = 0;
+        setTimeout(() => {
+          label.textContent = isDark ? 'حالت روشن' : 'حالت تاریک';
+          label.style.opacity = 1;
+        }, 180);
+      }
+    });
+
+    // اگر کاربر تنظیم سیستم را تغییر داد، همخوان کن (اختیاری)
+    if(window.matchMedia){
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        // فقط در صورتی sync کن که کاربر تاکنون تغییری نداده (localStorage خالی)
+        if(!localStorage.getItem('theme')){
+          if(e.matches){ body.classList.add('dark-mode'); btn.setAttribute('aria-pressed','true'); if(label) label.textContent='حالت روشن'; }
+          else { body.classList.remove('dark-mode'); btn.setAttribute('aria-pressed','false'); if(label) label.textContent='حالت تاریک'; }
+        }
+      });
+    }
+  })();
+</script>
+
+
+  <script>
+    function searchTable() {
+      let q = document.getElementById("search").value.toLowerCase();
+      let rows = document.querySelectorAll("#containerTable tbody tr");
+      for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].innerText.toLowerCase();
+        rows[i].style.display = text.includes(q) ? "" : "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
